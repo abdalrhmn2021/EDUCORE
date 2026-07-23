@@ -1,13 +1,5 @@
 import mongoose, { Mongoose } from 'mongoose';
 
-
-import dns from "dns";
-
-dns.setServers([
-  "8.8.8.8",
-  "1.1.1.1",
-]);
-
 declare global {
     var mongooseCache: {
         conn: Mongoose | null;
