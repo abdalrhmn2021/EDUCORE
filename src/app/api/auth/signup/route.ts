@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
 import User from "@/models/User";
+import { SignupSchema } from "@/lib/validations";
+import { hashPassword } from "@/lib/password";
 import { signToken, setAuthCookie } from "@/lib/auth";
-import bcrypt from "bcryptjs";
-import { loginSchema } from "@/lib/validations";
 
 export async function POST(request: Request) {
   try {
     await dbConnect();
 
     const body = await request.json();
-    const result = loginSchema.safeParse(body);
+    const result = SignupSchema.safeParse(body);
 
     if (!result.success) {
       return NextResponse.json(
@@ -19,25 +19,25 @@ export async function POST(request: Request) {
       );
     }
 
-    const { email, password } = result.data;
+    const { email, password, name, role } = result.data;
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const exists = await User.findOne({ email: email.toLowerCase() });
 
-    if (!user) {
+    if (exists) {
       return NextResponse.json(
-        { success: false, message: "Invalid credentials" },
-        { status: 401 }
+        { success: false, message: "Email already exists" },
+        { status: 400 }
       );
     }
 
-    const match = await bcrypt.compare(password, user.password);
+    const hashed = await hashPassword(password);
 
-    if (!match) {
-      return NextResponse.json(
-        { success: false, message: "Invalid credentials" },
-        { status: 401 }
-      );
-    }
+    const user = await User.create({
+      email: email.toLowerCase(),
+      password: hashed,
+      name,
+      role,
+    });
 
     const token = await signToken({
       userId: user._id.toString(),
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
     console.error(err);
 
     return NextResponse.json(
-      { success: false, message: "Server error" },
+      { success: false, message: "Signup error" },
       { status: 500 }
     );
   }

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
-import Course from "@/modles/Course";
-import { success } from "zod";
+import Course from "@/models/Course";
 import {getSession} from "@/lib/auth"
 import { addMaterialSchema } from "@/lib/validations";
 
@@ -14,18 +13,18 @@ export async function POST(request:Request,{params}:{params:Promise<{id:string}>
 
         if(!session ) {
             return NextResponse.json({
-                success:false,message:""
+                success:false,message:"غير مصرح"
             },{status:401})
         }
 
         const {id} = await params
-    
+
         await dbConnect()
 
         const course = await Course.findById(id)
         if(!course){
             return NextResponse.json(
-                {success:false , message:""},
+                {success:false , message:"المادة غير موجودة"},
                 {status:404}
             )
         }
@@ -33,7 +32,7 @@ export async function POST(request:Request,{params}:{params:Promise<{id:string}>
         if(session.role !== "admin" && course.professor.toString() !== session.userId){
 
             return NextResponse.json(
-                {success:false , message:""},
+                {success:false , message:"غير مصرح لك بإضافة محتوى لهذه المادة"},
                 {status:403}
             )
         }
@@ -45,7 +44,7 @@ export async function POST(request:Request,{params}:{params:Promise<{id:string}>
         if(!validtionResult.success){
             const errors = validtionResult.error.issues.map((e)=> e.message)
             return NextResponse.json(
-                {success:false , meassage:""},
+                {success:false , message:errors[0]},
                 {status:400}
             )
         }
@@ -54,12 +53,14 @@ export async function POST(request:Request,{params}:{params:Promise<{id:string}>
         await course.save()
 
         return NextResponse.json(
-            {success:true , message:"", course}
+            {success:true , message:"تم اضافة المحتوى بنجاح", course}
         )
 
     }catch(error) {
         console.error("Add material error:",error)
+        return NextResponse.json(
+            {success:false , message:"حدث خطأ"},
+            {status:500}
+        )
     }
-
-    
 }

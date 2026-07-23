@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import dbConnect from '@/lib/moongodb'
-import User from '@/modles/User'
+import User from '@/models/User'
 
 export async function GET(): Promise<NextResponse> {
     try {

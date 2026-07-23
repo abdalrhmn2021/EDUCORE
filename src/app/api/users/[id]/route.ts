@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
 import { getSession } from "@/lib/auth";
-import User from "@/modles/User";
-import { success } from "zod";
+import User from "@/models/User";
 
 export async function GET(
   request: Request,
@@ -13,7 +12,7 @@ export async function GET(
 
     if (!session) {
       return NextResponse.json(
-        { success: false, message: "" },
+        { success: false, message: "غير مصرح" },
         { status: 401 },
       );
     }
@@ -22,7 +21,7 @@ export async function GET(
 
     if (session.userId !== id && session.role !== "admin") {
       return NextResponse.json(
-        { success: false, message: "" },
+        { success: false, message: "غير مصرح بالوصول" },
         { status: 403 },
       );
     }
@@ -33,7 +32,7 @@ export async function GET(
 
     if (!user) {
       return NextResponse.json(
-        { success: false, message: "" },
+        { success: false, message: "المستخدم غير موجود" },
         { status: 404 },
       );
     }
@@ -49,7 +48,10 @@ export async function GET(
       },
     });
   } catch (error) {
-    return NextResponse.json({ success: false, message: "" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: "حدث خطأ" },
+      { status: 500 },
+    );
   }
 }
 
@@ -130,7 +132,10 @@ export async function PUT(
   }
 }
 
-export async function DELETE({ params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const session = await getSession();
 
@@ -155,7 +160,7 @@ export async function DELETE({ params }: { params: Promise<{ id: string }> }) {
       return NextResponse.json(
         {
           success: false,
-          message: "",
+          message: "لا يمكنك حذف حسابك الخاص",
         },
         { status: 400 },
       );
@@ -164,8 +169,8 @@ export async function DELETE({ params }: { params: Promise<{ id: string }> }) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, message: "" },
-        { status: 400 },
+        { success: false, message: "المستخدم غير موجود" },
+        { status: 404 },
       );
     }
 

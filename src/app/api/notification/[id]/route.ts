@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import dbConnect from "@/lib/moongodb";
-import Notification from "@/modles/Notification";
+import Notification from "@/models/Notification";
 
 export async function PUT(
   request: Request,
@@ -17,7 +17,7 @@ export async function PUT(
 
     await dbConnect();
 
-    const notification = await Notification.findByIdAndUpdate(
+    const notification = await Notification.findOneAndUpdate(
       { _id: id, userId: session.userId },
       { isRead: true },
       { new: true },

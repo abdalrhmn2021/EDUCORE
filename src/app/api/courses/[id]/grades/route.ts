@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
-import Course from "@/modles/Course";
-import { success } from "zod";
+import Course from "@/models/Course";
 import { getSession } from "@/lib/auth";
-import { addGradeSchema, addMaterialSchema } from "@/lib/validations";
+import { addGradeSchema } from "@/lib/validations";
 import mongoose from "mongoose";
 
 export async function POST(
@@ -37,15 +36,18 @@ export async function POST(
       session.role !== "admin" &&
       course.professor.toString() !== session.userId
     ) {
-      return NextResponse.json({
-        success: false,
-        message: "غير مصرح لك باضافة مواد ",
-      });
+      return NextResponse.json(
+        {
+          success: false,
+          message: "غير مصرح لك بإضافة درجات لهذه المادة",
+        },
+        { status: 403 },
+      );
     }
 
     const body = await request.json();
 
-    const validtionResult = addMaterialSchema.safeParse(body);
+    const validtionResult = addGradeSchema.safeParse(body);
 
     if (!validtionResult.success) {
       const error = validtionResult.error.issues.map((e) => e.message);
@@ -55,16 +57,41 @@ export async function POST(
       );
     }
 
-    course.materials.push(validtionResult.data);
+    const { studentId, grade, comment } = validtionResult.data;
+
+    if (!course.students.some((s) => s.toString() === studentId)) {
+      return NextResponse.json(
+        { success: false, message: "الطالب غير مسجل في هذه المادة" },
+        { status: 400 },
+      );
+    }
+
+    const existingGrade = course.grades.find(
+      (g) => g.student.toString() === studentId,
+    );
+
+    if (existingGrade) {
+      existingGrade.grade = grade;
+      existingGrade.comment = comment;
+      existingGrade.gradedAt = new Date();
+    } else {
+      course.grades.push({
+        student: new mongoose.Types.ObjectId(studentId),
+        grade,
+        comment,
+        gradedAt: new Date(),
+      });
+    }
+
     await course.save();
 
     return NextResponse.json({
       success: true,
-      message: "تم اضافة المادة التعليمية بنجاح",
-      course,
+      message: "تم حفظ الدرجة بنجاح",
+      grades: course.grades,
     });
   } catch (err) {
-    console.error("Add Material error:", err);
+    console.error("Add Grade error:", err);
 
     return NextResponse.json(
       { success: false, message: "حدث خطأ" },
@@ -106,9 +133,17 @@ export async function GET(
       return NextResponse.json({ success: true, grades: course.grades });
     }
 
-    
+    // الطالب يرى درجته فقط، وليس درجات كل الطلاب
+    const myGrade = (course.grades as any[]).find(
+      (g) => g.student?._id?.toString() === session.userId,
+    );
+
+    return NextResponse.json({
+      success: true,
+      grades: myGrade ? [myGrade] : [],
+    });
   } catch (err) {
-    console.error("Add Material error:", err);
+    console.error("Get Grades error:", err);
 
     return NextResponse.json(
       { success: false, message: "حدث خطأ" },

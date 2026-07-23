@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { is } from "zod/v4/locales/index.js";
 
 interface Course {
   id: string;

@@ -1,4 +1,4 @@
-import { email, z } from "zod";
+import { z } from "zod";
 
 export const SignupSchema = z.object({
   email: z
@@ -37,7 +37,7 @@ export const createCourseSchema = z.object({
     title: z.string().min(3, 'أحرف على الأقل'),
     description: z.string().optional(),
     code: z.string().min(2, 'رمز المادة مطلوب').max(10),
-    semester: z.enum(['الفرع الأول', 'الفرع الثاني', 'الفرع الثالث']),
+    semester: z.enum(['الفصل الاول', 'الفصل الثاني', 'الفصل الصيفي']),
     year: z.number().min(2020).max(2030),
     credits: z.number().min(1).max(6),
     type: z.enum(['undergraduate', 'graduate', 'online']),

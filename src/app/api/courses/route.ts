@@ -2,8 +2,7 @@ import { getSession } from "@/lib/auth";
 import { createCourseSchema } from "@/lib/validations";
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
-import Course from "@/modles/Course";
-import { success } from "zod";
+import Course from "@/models/Course";
 
 export async function GET(request: Request) {
   try {
@@ -25,7 +24,7 @@ export async function GET(request: Request) {
       if (session.role === "professor" && !browse && !type) {
         query.professor = session.userId;
       } else if (session.role === "student" && !browse && !type) {
-        query.student = session.userId;
+        query.students = session.userId;
       }
     }
 
@@ -118,13 +117,12 @@ export async function POST(request: Request) {
 
     if (existingCourses) {
       return NextResponse.json(
-        { success: false, message: "" },
+        { success: false, message: "رمز المادة مستخدم بالفعل" },
         { status: 400 },
       );
     }
 
-    const professorId =
-      session.role === "admin" ? session.userId : session.userId;
+    const professorId = session.userId;
 
     const course = await Course.create({
       title,

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
-import {GraduateProgram} from "@/modles/GraduateProgram";
+import {GraduateProgram} from "@/models/GraduateProgram";
 import { getSession } from "@/lib/auth";
 import { createGraduateProgramSchema } from "@/lib/validations";
 

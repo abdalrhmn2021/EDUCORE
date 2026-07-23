@@ -46,9 +46,6 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
-import { da } from "zod/locales";
-import { boolean } from "zod";
-import { div, header, li } from "framer-motion/client";
 
 const components: { title: string; href: string; description: string }[] = [
   {

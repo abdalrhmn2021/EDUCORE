@@ -2,7 +2,6 @@ import { SignJWT, jwtVerify } from "jose";
 
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
-import { number } from "zod";
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "fallback-secret-for-development",

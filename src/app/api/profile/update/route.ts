@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import dbConnect from '@/lib/moongodb'
-import User from '@/modles/User'
+import User from '@/models/User'
 import { hashPassword } from '@/lib/password'
-import { error } from 'next/dist/build/output/log';
 
 export async function PUT(request: Request) {
   try {

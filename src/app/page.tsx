@@ -27,7 +27,7 @@ interface UserSession {
 }
 
 export default function Home() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<UserSession | null>(null);
   const [isLoading, setisLoading] = useState(true);
   useEffect(() => {
     async function fetchUser() {
@@ -98,7 +98,7 @@ export default function Home() {
                   دخول لوحة التحكم{" "}
                   <ArrowLeft
                     className="mr-2 w-4 h-4 transition-transform
-                    groub-hover:-translate-x-1
+                    group-hover:-translate-x-1
                     "
                   />
                 </Button>

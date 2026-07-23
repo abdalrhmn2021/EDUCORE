@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import dbConnect from '@/lib/moongodb'
-import Notification from '@/modles/Notification'
+import Notification from '@/models/Notification'
 
 export async function GET() {
   try {

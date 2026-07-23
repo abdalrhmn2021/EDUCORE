@@ -45,7 +45,7 @@ interface Student {
 
 interface Grade {
   student: string | Student;
-  score: number;
+  grade: number;
   comment?: string;
 }
 
@@ -113,7 +113,7 @@ export function CourseManager() {
     });
 
     if (existingGrade) {
-      setValue("grade", existingGrade.score);
+      setValue("grade", existingGrade.grade);
       setValue("comment", existingGrade.comment || "");
     } else {
       reset({
@@ -143,7 +143,7 @@ export function CourseManager() {
       const resulet = await res.json();
 
       if (!resulet.success) {
-        toast.error(resulet.massage);
+        toast.error(resulet.message);
         return;
       }
 
@@ -219,9 +219,9 @@ export function CourseManager() {
         </Card>
         <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardHeader className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium">
               متوسط الدرجات
-            </CardHeader>
+            </CardTitle>
             <GraduationCap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
 
@@ -229,7 +229,7 @@ export function CourseManager() {
             <div className="text-2xl font-bold">
               {grades.length > 0
                 ? Math.round(
-                    grades.reduce((acc, g) => acc + g.score, 0) / grades.length,
+                    grades.reduce((acc, g) => acc + g.grade, 0) / grades.length,
                   )
                 : "-"}
             </div>
@@ -237,8 +237,10 @@ export function CourseManager() {
         </Card>
 
         <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium"></CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              الساعات المعتمدة
+            </CardTitle>
             <BookOpen className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -292,12 +294,12 @@ export function CourseManager() {
                               <span
                                 className={cn(
                                   "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-                                  grade.score >= 60
+                                  grade.grade >= 60
                                     ? "bg-green-100 text-green-800"
                                     : "bg-red-100 text-red-800",
                                 )}
                               >
-                                {grade.score}
+                                {grade.grade}
                               </span>
                             ) : (
                               <span className="text-muted-foreground">—</span>
@@ -342,7 +344,7 @@ export function CourseManager() {
                   type="number"
                   id="grade"
                   className={cn(
-                    "flex h-10 rounded-md border bprder-input bg-background px-3 py-2 text=sm ring-offset-background",
+                    "flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                     errors.grade &&
                       "border-destructive focus-visible:ring-destructive",

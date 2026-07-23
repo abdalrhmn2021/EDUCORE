@@ -72,7 +72,7 @@ export default function LoginPage() {
 
       const result = await res.json();
 
-      if (result.success) {
+      if (!result.success) {
         toast.error(result.message);
         return;
       }

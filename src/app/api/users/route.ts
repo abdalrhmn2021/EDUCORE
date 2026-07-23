@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth"; // مسار جلب الجلسة
 import dbConnect from "@/lib/moongodb"; // مسار اتصال قاعدة البيانات
-import User from "@/modles/User"; // موديل المستخدم
-import { email, success } from "zod";
+import User from "@/models/User"; // موديل المستخدم
 import { hashPassword } from "@/lib/password";
 
 export async function GET() {
@@ -35,6 +34,8 @@ export async function GET() {
       users: users.map((user) => ({
         id: user._id.toString(),
         email: user.email,
+        name: user.name,
+        role: user.role,
       })),
     });
   } catch (err) {
@@ -59,7 +60,7 @@ export async function POST(req: Request) {
     if (session.role !== "admin") {
       return NextResponse.json(
         { success: false, message: "غير مصرح بالوصول" },
-        { status: 400 },
+        { status: 403 },
       );
     }
 
@@ -90,7 +91,7 @@ export async function POST(req: Request) {
       user: {
         id: user._id.toString(),
         email: user.email,
-        name: user.email,
+        name: user.name,
         role: user.role,
       },
     });

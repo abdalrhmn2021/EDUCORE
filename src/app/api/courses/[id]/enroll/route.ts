@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
-import Course from "@/modles/Course";
+import Course from "@/models/Course";
 import { success } from "zod";
 import { getSession } from "@/lib/auth";
 

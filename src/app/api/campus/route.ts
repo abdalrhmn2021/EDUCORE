@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth"; // افتراض المسار
 import dbConnect from "@/lib/moongodb"; // افتراض المسار
-import CampusEvent from "@/modles/CompusEvent"; // افتراض المسار
+import CampusEvent from "@/models/CompusEvent"; // افتراض المسار
 import { createCampusEventSchema } from "@/lib/validations";
-import { success } from "zod";
-import { event } from "next/dist/build/output/log";
-import { Status } from "next/dist/next-devtools/dev-overlay/components/devtools-indicator/status-indicator";
 
 export async function GET() {
   try {
@@ -48,7 +45,7 @@ export async function POST(request: Request) {
     if (!validationResult.success) {
       const errors = validationResult.error.issues.map((e) => e.message);
       return NextResponse.json(
-        { success: false, massage: errors[0] },
+        { success: false, message: errors[0] },
         { status: 400 },
       );
     }

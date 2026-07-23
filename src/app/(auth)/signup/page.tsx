@@ -70,7 +70,7 @@ export default function SignupIPage() {
 
   const onSubmit = async (data: SignupInput) => {
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -78,12 +78,12 @@ export default function SignupIPage() {
 
       const result = await res.json();
 
-      if (result.success) {
+      if (!result.success) {
         toast.error(result.message);
         return;
       }
 
-      toast.success("تم تسجيل الدخول بنجاح");
+      toast.success("تم إنشاء الحساب بنجاح");
       router.push(`/dashboard/${result.user.role}`);
     } catch {
       toast.error("حدث غير متوقع");

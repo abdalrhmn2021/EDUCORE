@@ -1,7 +1,7 @@
 import {ProfileForm} from "@/components/profile/ProfileForm";
 import {getSession} from "@/lib/auth"
 import dbConnect from "@/lib/moongodb"
-import User from "@/modles/User";
+import User from "@/models/User";
 import {redirect}from "next/navigation"
 
 
