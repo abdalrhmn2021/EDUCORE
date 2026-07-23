@@ -1,3 +1,5 @@
+"use client";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -255,7 +257,7 @@ export default function CourseDetailsPage({
                 {course.format && (
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="text-gray-500 ">التنسيق</span>
-                    <span className=" font-medium ">{course.requirements}</span>
+                    <span className=" font-medium ">{course.format}</span>
                   </div>
                 )}
 
