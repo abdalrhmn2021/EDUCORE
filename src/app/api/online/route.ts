@@ -3,7 +3,6 @@ import dbConnect from "@/lib/moongodb";
 import Course from "@/models/Course";
 import { getSession } from "@/lib/auth";
 import { createCourseSchema } from "@/lib/validations";
-import { success } from "zod";
 
 export async function GET() {
   try {

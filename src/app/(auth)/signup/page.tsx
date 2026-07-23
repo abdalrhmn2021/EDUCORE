@@ -28,7 +28,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { loginSchema, SignupInput, SignupSchema } from "@/lib/validations";
-import { data, div, label, p } from "framer-motion/client";
 
 const roles = [
   { value: "student", label: "الطالب" },

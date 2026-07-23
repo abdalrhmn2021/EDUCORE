@@ -28,7 +28,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { loginSchema, LoginInput } from "@/lib/validations";
-import { data, div } from "framer-motion/client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -87,7 +86,7 @@ export default function LoginPage() {
   if (isCheckingAuth) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-span text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
