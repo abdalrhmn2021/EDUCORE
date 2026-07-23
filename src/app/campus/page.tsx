@@ -62,7 +62,7 @@ export default function CampusLifePage() {
 
   useEffect(() => {
     fetchEvents();
-  });
+  }, []);
 
   const handleAddEvent = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,7 +97,7 @@ export default function CampusLifePage() {
   };
 
   return (
-    <div className="container mx-auto py-10 px04">
+    <div className="container mx-auto py-10 px-4">
       <div className="flex justify-between items-center mb-10">
         <div>
           <h1 className="text-4xl font-bold text-primary mb-2">
@@ -140,7 +140,7 @@ export default function CampusLifePage() {
                     setFormData({ ...formData, description: e.target.value })
                   }
                   required
-                  minLength={3}
+                  minLength={10}
                 />
               </div>
 
@@ -159,7 +159,7 @@ export default function CampusLifePage() {
               <div className="space-t-2">
                 <Label>الموقع </Label>
                 <Input
-                  type="datetime-local"
+                  type="text"
                   value={formData.location}
                   onChange={(e) =>
                     setFormData({ ...formData, location: e.target.value })
@@ -170,7 +170,7 @@ export default function CampusLifePage() {
               <div className="space-t-2">
                 <Label>رابط اختياري </Label>
                 <Input
-                  type="datetime-local"
+                  type="url"
                   value={formData.image}
                   onChange={(e) =>
                     setFormData({ ...formData, image: e.target.value })

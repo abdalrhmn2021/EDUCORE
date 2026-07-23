@@ -21,7 +21,7 @@ export function NotificationList() {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await fetch("/api/notifications");
+        const res = await fetch("/api/notification");
         if (res.ok) {
           const data = await res.json();
           setNotifications(data);
@@ -37,7 +37,7 @@ export function NotificationList() {
 
   const handleMarkAsRead = async (id: string) => {
     try {
-      const res = await fetch(`/api/notifications/${id}`, { method: "PUT" });
+      const res = await fetch(`/api/notification/${id}`, { method: "PUT" });
       if (res.ok) {
         setNotifications((prev) =>
           prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
@@ -53,7 +53,7 @@ export function NotificationList() {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/notifications/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/notification/${id}`, { method: "DELETE" });
       if (res.ok) {
         setNotifications((prev) => prev.filter((n) => n.id !== id));
         toast.success("تم حذف الإشعار");
