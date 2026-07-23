@@ -161,7 +161,7 @@ export function Header() {
                           </a>
                         </NavigationMenuLink>
                       </li>
-                      <ListItem href="/courser" title="برامج البكالوريس">
+                      <ListItem href="/courses" title="برامج البكالوريس">
                         شهادات في العلوم والهندسة والاداب
                       </ListItem>
                       <ListItem href="/graduate" title="الدرسات العليا">

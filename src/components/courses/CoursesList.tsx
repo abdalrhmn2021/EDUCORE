@@ -46,7 +46,7 @@ export default function CoursesList({ type }: CouresesListProps) {
       try {
         const params = new URLSearchParams();
         if (type) {
-          params.append(type, "type");
+          params.append("type", type);
         }
 
         params.append("browse", "true");
@@ -92,43 +92,45 @@ export default function CoursesList({ type }: CouresesListProps) {
       </div>
     );
   }
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {courses.map((course) => (
-      <Card
-        key={course.id}
-        className="flex flex-col hover:shadow-lg transition-shadow duration-300"
-      >
-        <div className="h-48 bg-primary/5 relative overflow-hidden rounded-t-xl group">
-          {course.image ? (
-            <img
-              src={course.image}
-              alt={course.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-primary/20">
-              <svg
-                className="w-16 h-16"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
-              </svg>
-            </div>
-          )}
-
-          <div className="absolute top-2 right-2">
-            <span className="bg-white px-2 py-1 text-xs font-bold rounded text-primary border border-gray-100 shadow-sm">
-              {course.code}
-            </span>
-            {course.type === "online" && (
-              <span
-                className="bg-green-100 text-green-800 px-2 py-1 text-xs 
-          font-bold rounded border border-green-200 shadow-sm"
-              >
-                اونلاين
-              </span>
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {courses.map((course) => (
+        <Card
+          key={course.id}
+          className="flex flex-col hover:shadow-lg transition-shadow duration-300"
+        >
+          <div className="h-48 bg-primary/5 relative overflow-hidden rounded-t-xl group">
+            {course.image ? (
+              <img
+                src={course.image}
+                alt={course.title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full text-primary/20">
+                <svg
+                  className="w-16 h-16"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
+                </svg>
+              </div>
             )}
+
+            <div className="absolute top-2 right-2">
+              <span className="bg-white px-2 py-1 text-xs font-bold rounded text-primary border border-gray-100 shadow-sm">
+                {course.code}
+              </span>
+              {course.type === "online" && (
+                <span
+                  className="bg-green-100 text-green-800 px-2 py-1 text-xs
+            font-bold rounded border border-green-200 shadow-sm"
+                >
+                  اونلاين
+                </span>
+              )}
+            </div>
           </div>
           <CardHeader>
             <CardTitle className="line-clamp-1">{course.title}</CardTitle>
@@ -156,7 +158,7 @@ export default function CoursesList({ type }: CouresesListProps) {
               <span>{course.credits}</span>
             </div>
             {course.requirements &&(
-              <div className="felx items-center gap-2 text-amber-600">
+              <div className="flex items-center gap-2 text-amber-600">
                 <span className="w-4 text-center"></span>
                 <span className="line-clamp-1" title={course.requirements}>متطلبات:{course.requirements}</span>
               </div>
@@ -164,11 +166,11 @@ export default function CoursesList({ type }: CouresesListProps) {
           </CardContent>
           <CardFooter className="pt-4 border-t border-gray-100 mt-auto">
             <Button className="w-full" variant={"outline"} asChild>
-              <Link href={`courses/${course.id}`}>عرض التفاصيل</Link>
+              <Link href={`/courses/${course.id}`}>عرض التفاصيل</Link>
             </Button>
           </CardFooter>
-        </div>
-      </Card>
-    ))}
-  </div>;
+        </Card>
+      ))}
+    </div>
+  );
 }
