@@ -102,7 +102,7 @@ export function ProfileForm({ user }: { user: UserProfile }) {
         <div className="space-y-2">
 
             <label htmlFor="" className="text-sm font-medium">الدور(للاطلاع فقط)</label>
-            <Input value={user.role === "admin" ? "مدير":user.role === "professor" ? "استاذ":"'طالب"} disabled></Input>
+            <Input value={user.role === "admin" ? "مدير":user.role === "professor" ? "استاذ":"طالب"} disabled></Input>
         </div>
 
         <Button type="submit" className="w-full" disabled={isLoading}>
