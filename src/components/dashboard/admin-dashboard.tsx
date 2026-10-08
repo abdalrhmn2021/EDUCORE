@@ -1,6 +1,8 @@
 "use client";
 
 import useSWR from "swr";
+import { useState } from "react";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 import {
   BarChart,
@@ -38,6 +40,7 @@ export function AdminDashboard() {
   const {
     data: usersData,
     isLoading: loadingUsers,
+    mutate: mutateUsers,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useSWR<{ users: any[] }>("/api/users", fetcher);
 
@@ -46,6 +49,30 @@ export function AdminDashboard() {
     isLoading: loadingCourses,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useSWR<{ courses: any[] }>("/api/courses?browse=true", fetcher);
+
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  async function changeRole(userId: string, role: string) {
+    setUpdatingId(userId);
+    try {
+      const res = await fetch(`/api/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role }),
+      });
+      const result = await res.json();
+      if (!result.success) {
+        toast.error(result.message || "تعذر تغيير الدور");
+        return;
+      }
+      toast.success("تم تغيير الدور");
+      await mutateUsers();
+    } catch {
+      toast.error("حدث خطأ غير متوقع");
+    } finally {
+      setUpdatingId(null);
+    }
+  }
 
   const stats = [
     {
@@ -175,9 +202,17 @@ export function AdminDashboard() {
                         {user.email}
                       </p>
                     </div>
-                    <span className="text-xs bg-muted px-2 py-1 rounded">
-                      {user.role}
-                    </span>
+                    <select
+                      aria-label="دور المستخدم"
+                      className="text-xs bg-muted px-2 py-1 rounded border border-input"
+                      value={user.role}
+                      disabled={updatingId === user.id}
+                      onChange={(e) => changeRole(user.id, e.target.value)}
+                    >
+                      <option value="student">طالب</option>
+                      <option value="professor">أستاذ</option>
+                      <option value="admin">مدير</option>
+                    </select>
                   </div>
                 ))
               )}

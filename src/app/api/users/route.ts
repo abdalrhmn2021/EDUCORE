@@ -3,6 +3,7 @@ import { getSession } from "@/lib/auth"; // مسار جلب الجلسة
 import dbConnect from "@/lib/moongodb"; // مسار اتصال قاعدة البيانات
 import User from "@/models/User"; // موديل المستخدم
 import { hashPassword } from "@/lib/password";
+import { CreateUserSchema } from "@/lib/validations";
 
 export async function GET() {
   try {
@@ -66,7 +67,14 @@ export async function POST(req: Request) {
 
     await dbConnect();
 
-    const { email, role, name, password } = await req.json();
+    const parsed = CreateUserSchema.safeParse(await req.json());
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, message: parsed.error.issues[0].message },
+        { status: 400 },
+      );
+    }
+    const { email, role, name, password } = parsed.data;
     const existingUser = await User.findOne({ email: email.toLowerCase() });
 
     if (existingUser) {

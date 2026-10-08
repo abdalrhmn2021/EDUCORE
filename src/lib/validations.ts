@@ -14,9 +14,20 @@ export const SignupSchema = z.object({
     .string()
     .min(2, "الاسم يجب أن يكون حرفين على الأقل")
     .max(50, "الاسم طويل جداً"),
-  role: z.enum(["admin", "professor", "student"], {
-    message: "يرجى اختيار دور صحيح",
-  }),
+});
+
+// الدور لا يُختار عند التسجيل العام: كل حساب جديد يكون "student".
+// المدير فقط يحدد دور الأستاذ أو المدير من لوحة التحكم.
+export const RoleSchema = z.enum(["admin", "professor", "student"], {
+  message: "يرجى اختيار دور صحيح",
+});
+
+export const CreateUserSchema = SignupSchema.extend({
+  role: RoleSchema,
+});
+
+export const UpdateRoleSchema = z.object({
+  role: RoleSchema,
 });
 
 export const loginSchema = z.object({

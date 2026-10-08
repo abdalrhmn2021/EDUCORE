@@ -27,13 +27,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { loginSchema, SignupInput, SignupSchema } from "@/lib/validations";
-
-const roles = [
-  { value: "student", label: "الطالب" },
-  { value: "professor", label: "استاذ" },
-  { value: "admin", label: "مدير" },
-];
+import { SignupInput, SignupSchema } from "@/lib/validations";
 
 export default function SignupIPage() {
   const router = useRouter();
@@ -230,33 +224,6 @@ export default function SignupIPage() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="role" className="text-sm font-medium">
-                  نوع الحساب
-                </label>
-
-                <select
-                  className={cn(
-                    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                    "disabled:cursor-not-allowed disabled:opacity-50",
-                  )}
-                  id="role"
-                  {...register("role")}
-                  disabled={isSubmitting}
-                >
-                  {roles.map((role) => (
-                    <option key={role.value} value={role.value}>
-                      {role.label}
-                    </option>
-                  ))}
-                </select>
-                {errors.role && (
-                  <p className="text-xs text-destructive">
-                    {errors.role.message}
-                  </p>
-                )}
-              </div>
 
               <Button disabled={isSubmitting} type="submit" className="w-full">
                 {isSubmitting ? (
@@ -265,7 +232,7 @@ export default function SignupIPage() {
                     جاري انشاء الحساب...
                   </>
                 ) : (
-                  "تسجيل الدخول "
+                  "إنشاء حساب"
                 )}
               </Button>
 

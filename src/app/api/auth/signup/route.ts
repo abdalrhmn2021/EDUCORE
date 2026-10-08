@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { email, password, name, role } = result.data;
+    const { email, password, name } = result.data;
 
     const exists = await User.findOne({ email: email.toLowerCase() });
 
@@ -36,7 +36,8 @@ export async function POST(request: Request) {
       email: email.toLowerCase(),
       password: hashed,
       name,
-      role,
+      // الدور يحدده السيرفر دائماً، ولا يُقبل من المستخدم
+      role: "student",
     });
 
     const token = await signToken({
@@ -65,4 +66,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
+}

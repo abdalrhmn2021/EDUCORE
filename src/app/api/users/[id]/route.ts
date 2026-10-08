@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
 import { getSession } from "@/lib/auth";
 import User from "@/models/User";
+import { UpdateRoleSchema } from "@/lib/validations";
 
 export async function GET(
   request: Request,
@@ -92,7 +93,29 @@ export async function PUT(
 
     if (name) updateData.name = name;
     if (email) updateData.email = email.toLowerCase();
-    if (role && session.role === "admin") updateData.role = role;
+    if (role !== undefined) {
+      // تغيير الدور للمدير فقط، وبقيمة صحيحة فقط
+      if (session.role !== "admin") {
+        return NextResponse.json(
+          { success: false, message: "Forbidden" },
+          { status: 403 },
+        );
+      }
+      const parsedRole = UpdateRoleSchema.safeParse({ role });
+      if (!parsedRole.success) {
+        return NextResponse.json(
+          { success: false, message: parsedRole.error.issues[0].message },
+          { status: 400 },
+        );
+      }
+      if (id === session.userId && parsedRole.data.role !== "admin") {
+        return NextResponse.json(
+          { success: false, message: "لا يمكنك إزالة صلاحية المدير عن حسابك" },
+          { status: 400 },
+        );
+      }
+      updateData.role = parsedRole.data.role;
+    }
 
     const user = await User.findByIdAndUpdate(id, updateData, {
       new: true,
