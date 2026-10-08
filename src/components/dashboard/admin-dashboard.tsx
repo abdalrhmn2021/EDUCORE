@@ -56,7 +56,7 @@ export function AdminDashboard() {
     setUpdatingId(userId);
     try {
       const res = await fetch(`/api/users/${userId}`, {
-        method: "PATCH",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role }),
       });
