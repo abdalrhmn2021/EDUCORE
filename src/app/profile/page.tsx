@@ -1,5 +1,5 @@
 import {ProfileForm} from "@/components/profile/ProfileForm";
-import {getSession} from "@/lib/auth"
+import { getSession } from "@/lib/session"
 import dbConnect from "@/lib/moongodb"
 import User from "@/models/User";
 import {redirect}from "next/navigation"

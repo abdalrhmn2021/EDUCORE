@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth"; // افتراض المسار
+import { getSession } from "@/lib/session"; // افتراض المسار
 import dbConnect from "@/lib/moongodb"; // افتراض المسار
 import CampusEvent from "@/models/CompusEvent"; // افتراض المسار
 import { createCampusEventSchema } from "@/lib/validations";

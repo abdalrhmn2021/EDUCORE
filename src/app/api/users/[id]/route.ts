@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 import User from "@/models/User";
 import { ProfileUpdateSchema, UpdateRoleSchema } from "@/lib/validations";
 

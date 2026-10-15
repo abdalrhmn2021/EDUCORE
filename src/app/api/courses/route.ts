@@ -1,4 +1,4 @@
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 import { createCourseSchema } from "@/lib/validations";
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";

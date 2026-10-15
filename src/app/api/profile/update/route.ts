@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/session'
 import dbConnect from '@/lib/moongodb'
 import User from '@/models/User'
 import { hashPassword } from '@/lib/password'

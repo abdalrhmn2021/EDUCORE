@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
 import {GraduateProgram} from "@/models/GraduateProgram";
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 import { createGraduateProgramSchema } from "@/lib/validations";
 
 export async function GET() {

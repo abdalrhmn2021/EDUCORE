@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth"; // مسار جلب الجلسة
+import { getSession } from "@/lib/session"; // مسار جلب الجلسة
 import dbConnect from "@/lib/moongodb"; // مسار اتصال قاعدة البيانات
 import User from "@/models/User"; // موديل المستخدم
 import { hashPassword } from "@/lib/password";
