@@ -68,7 +68,7 @@ export async function POST(request: Request) {
     if(!validationResult.success){
         const errors  = validationResult.error.issues.map((e)=>e.message)
 
-        return NextResponse.json({success:false , message:""},{status:400})
+        return NextResponse.json({success:false , message:errors[0]},{status:400})
     }
    
     const {code} = validationResult.data;
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
 
     if(existingUser){
         return NextResponse.json(
-            {success:false , message:""},
+            {success:false , message:"رمز المادة مستخدم بالفعل"},
             {status:400}
         )
     }
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
         success:true,
-        message:"",
+        message:"تم إنشاء المادة بنجاح",
         course:{
             id:course._id.toString(),
             title:course.title

@@ -90,8 +90,8 @@ export default function GraduatePage() {
   };
 
   useEffect(() => {
-    fetchPrograms();
-    fetchUser();
+    // نطلب البيانات بعد ما الـ effect يخلص (مش بنفس اللحظة) - هيك React ما بيعمل render مكرر
+    void Promise.resolve().then(() => Promise.all([fetchPrograms(), fetchUser()]));
   }, []);
 
   const canAddProgram = user?.role === "admin" || user?.role === "professor";

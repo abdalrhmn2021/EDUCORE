@@ -77,7 +77,8 @@ export default function ProfessorDashboardContent() {
   };
 
   useEffect(() => {
-    fetchCourses();
+    // نطلب البيانات بعد ما الـ effect يخلص (مش بنفس اللحظة) - هيك React ما بيعمل render مكرر
+    void Promise.resolve().then(fetchCourses);
   }, []);
 
   const handleCreateCourse = async (e: React.FormEvent) => {

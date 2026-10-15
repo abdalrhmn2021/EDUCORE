@@ -12,7 +12,7 @@ export async function POST(
 
     if (!session) {
       return NextResponse.json(
-        { success: false, message: "" },
+        { success: false, message: "غير مصرح" },
         { status: 401 },
       );
     }
@@ -26,7 +26,7 @@ export async function POST(
 
     if (!course) {
       return NextResponse.json(
-        { success: false, message: "" },
+        { success: false, message: "المادة غير موجودة" },
         { status: 404 },
       );
     }
@@ -63,7 +63,7 @@ export async function POST(
   } catch (err) {
     console.error("Enroll student error:", err);
     return NextResponse.json(
-      { success: false, message: false },
+      { success: false, message: "حدث خطأ" },
       { status: 500 },
     );
   }
@@ -119,7 +119,7 @@ export async function DELETE(
   } catch (err) {
     console.error("Enroll student error:", err);
     return NextResponse.json(
-      { success: false, message: false },
+      { success: false, message: "حدث خطأ" },
       { status: 500 },
     );
   }
