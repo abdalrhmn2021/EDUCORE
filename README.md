@@ -6,6 +6,15 @@ A full-stack university management system with role-based dashboards for admins,
 
 > Built as part of a mentorship-guided learning path (developed alongside an online mentor), then independently debugged, refactored, and deployed.
 
+## Try it
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Professor | `professor@educore.demo` | `Demo1234` |
+| Student | `student@educore.demo` | `Demo1234` |
+
+Demo data can be (re)created with `npm run seed-demo`.
+
 ## Features
 
 - **Authentication** — JWT-based sessions (`jose`, Edge-compatible) with httpOnly cookies, role-based access control enforced via Next.js middleware

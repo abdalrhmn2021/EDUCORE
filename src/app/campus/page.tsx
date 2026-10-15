@@ -218,7 +218,7 @@ export default function CampusLifePage() {
                 )}
 
                 <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold">
-                  {new Date(event.date).toLocaleDateString("ar-SA")}
+                  {new Date(event.date).toLocaleDateString("ar-EG", { day: "numeric", month: "long", year: "numeric" })}
                 </div>
               </div>
 

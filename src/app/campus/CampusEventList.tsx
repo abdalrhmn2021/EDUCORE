@@ -67,7 +67,7 @@ export default function CampusEventsList() {
             )}
 
             <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-primary shadow-sm">
-              {new Date(event.date).toLocaleDateString("ar-SA")}
+              {new Date(event.date).toLocaleDateString("ar-EG", { day: "numeric", month: "long", year: "numeric" })}
             </div>
           </div>
 

@@ -6,7 +6,7 @@ export interface ICampusEvent extends Document {
 
     title:string
     description:string
-    data:Date
+    date:Date
     location:string
     image?:string
     createdAt:Date
@@ -24,7 +24,7 @@ const CamupsEventSchema = new Schema<ICampusEvent>(
             type:String,
             required:[true,"الوصف المطلوب"]
         },
-        data:{
+        date:{
             type:Date,
             required:[true,'التاريخ المطلوب']
         },
