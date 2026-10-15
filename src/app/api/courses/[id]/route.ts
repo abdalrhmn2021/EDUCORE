@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
 import Course from "@/models/Course";
+import { getSession } from "@/lib/auth";
 
 export async function GET(
   request: Request,
@@ -22,12 +23,26 @@ export async function GET(
       );
     }
 
+    // فقط أستاذ المادة أو المدير بيشوف قائمة الطلاب وكل الدرجات.
+    // الزائر أو طالب ثاني بيشوف عدد الطلاب بس، والطالب بيشوف درجته هو بس.
+    const session = await getSession();
+    const professorId = (course.professor as { _id?: { toString(): string } } | null)?._id?.toString();
+    const canSeeAll =
+      session?.role === "admin" || (!!session && professorId === session.userId);
+
+    const { students, grades, ...publicFields } = course;
+
     return NextResponse.json({
       success: true,
       course: {
-        ...course,
+        ...publicFields,
         id: course._id.toString(),
         _id: undefined,
+        studentsCount: students.length,
+        students: canSeeAll ? students : undefined,
+        grades: canSeeAll
+          ? grades
+          : grades.filter((g) => !!session && g.student?.toString() === session.userId),
       },
     });
   } catch (error) {

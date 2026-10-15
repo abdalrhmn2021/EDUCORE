@@ -129,7 +129,9 @@ export async function GET(
       );
     }
 
-    if (session.role === "professor" || session.role === "admin") {
+    const ownsCourse =
+      (course.professor as unknown as { toString(): string }).toString() === session.userId;
+    if (session.role === "admin" || (session.role === "professor" && ownsCourse)) {
       return NextResponse.json({ success: true, grades: course.grades });
     }
 

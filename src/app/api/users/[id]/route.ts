@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/moongodb";
 import { getSession } from "@/lib/auth";
 import User from "@/models/User";
-import { UpdateRoleSchema } from "@/lib/validations";
+import { ProfileUpdateSchema, UpdateRoleSchema } from "@/lib/validations";
 
 export async function GET(
   request: Request,
@@ -89,10 +89,31 @@ export async function PUT(
 
     const { name, email, role } = await request.json();
 
+    const parsed = ProfileUpdateSchema.pick({ name: true, email: true }).safeParse({
+      name: name || undefined,
+      email: email || undefined,
+    });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, message: parsed.error.issues[0].message },
+        { status: 400 },
+      );
+    }
+
     const updateData: Record<string, string> = {};
 
-    if (name) updateData.name = name;
-    if (email) updateData.email = email.toLowerCase();
+    if (parsed.data.name) updateData.name = parsed.data.name;
+    if (parsed.data.email) {
+      const newEmail = parsed.data.email.toLowerCase();
+      const taken = await User.findOne({ email: newEmail, _id: { $ne: id } });
+      if (taken) {
+        return NextResponse.json(
+          { success: false, message: "البريد الالكتروني مستخدم بالفعل" },
+          { status: 400 },
+        );
+      }
+      updateData.email = newEmail;
+    }
     if (role !== undefined) {
       // تغيير الدور للمدير فقط، وبقيمة صحيحة فقط
       if (session.role !== "admin") {

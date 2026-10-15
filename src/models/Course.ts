@@ -1,4 +1,6 @@
 import mongoose, {Schema ,Document ,Model ,Types} from "mongoose";
+// populate("professor"/"coordinator") needs the User model registered - import it here so every route that uses this model works
+import "./User";
 
 export interface IGrade{
     student:Types.ObjectId

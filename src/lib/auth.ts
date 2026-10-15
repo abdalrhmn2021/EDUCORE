@@ -3,8 +3,12 @@ import { SignJWT, jwtVerify } from "jose";
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 
+// بالإنتاج لازم JWT_SECRET يكون موجود: لو استخدمنا نص معروف، أي حد بيقدر يزوّر توكن ويصير admin
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === "production") {
+  throw new Error("JWT_SECRET is not set");
+}
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "fallback-secret-for-development",
+  process.env.JWT_SECRET || "dev-only-secret-do-not-use-in-production",
 );
 const COOKIE_NAME = "token";
 

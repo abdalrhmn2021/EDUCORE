@@ -3,6 +3,7 @@ import { getSession } from '@/lib/auth'
 import dbConnect from '@/lib/moongodb'
 import User from '@/models/User'
 import { hashPassword } from '@/lib/password'
+import { ProfileUpdateSchema } from '@/lib/validations'
 
 export async function PUT(request: Request) {
   try {
@@ -12,8 +13,13 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-    const { name, email, password } = body
+    const parsed = ProfileUpdateSchema.safeParse(await request.json())
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
+    }
+    const { name, password } = parsed.data
+    // نفس طريقة التسجيل: الإيميل دايماً small letters، عشان ما يصير حسابين لنفس الإيميل
+    const email = parsed.data.email?.toLowerCase()
 
     await dbConnect()
 

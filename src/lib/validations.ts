@@ -38,6 +38,14 @@ export const loginSchema = z.object({
     password:z.string().min(1,"كلمة المرور مطلوبة")
 });
 
+// تعديل الملف الشخصي: كل الحقول اختيارية، بس اللي بينبعت لازم يكون صحيح
+// (كلمة المرور الجديدة بنفس شروط التسجيل)
+export const ProfileUpdateSchema = z.object({
+  name: SignupSchema.shape.name.optional(),
+  email: SignupSchema.shape.email.optional(),
+  password: SignupSchema.shape.password.optional(),
+});
+
 export const updateUserSchema = z.object({
     name:z.string().min(2).max(50).optional(),
     email:z.string().email().optional(),
