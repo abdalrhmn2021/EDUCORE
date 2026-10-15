@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -37,6 +38,10 @@ export default function CampusLifePage() {
   const [events, setEvents] = useState<CampusEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  // زر "اضافة فعالية" بيظهر للأستاذ والمدير بس (السيرفر كمان بيرفض غيرهم)
+  const [canAdd, setCanAdd] = useState(false);
+  // الفعالية المفتوح وصفها كامل (زر التفاصيل)
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -63,6 +68,13 @@ export default function CampusLifePage() {
   useEffect(() => {
     // نطلب البيانات بعد ما الـ effect يخلص (مش بنفس اللحظة) - هيك React ما بيعمل render مكرر
     void Promise.resolve().then(fetchEvents);
+    void fetch("/api/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        const role = data?.user?.role;
+        setCanAdd(role === "admin" || role === "professor");
+      })
+      .catch(() => setCanAdd(false));
   }, []);
 
   const handleAddEvent = async (e: React.FormEvent) => {
@@ -109,6 +121,7 @@ export default function CampusLifePage() {
           </p>
         </div>
 
+        {canAdd && (
         <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
           <DialogTrigger asChild>
             <Button>اضافة فعالية</Button>
@@ -185,6 +198,7 @@ export default function CampusLifePage() {
             </form>
           </DialogContent>
         </Dialog>
+        )}
       </div>
 
       {loading ? (
@@ -213,7 +227,7 @@ export default function CampusLifePage() {
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full">
-                    <span className="text-4xl">👑</span>
+                    <CalendarDays className="h-12 w-12 text-primary/40" aria-hidden="true" />
                   </div>
                 )}
 
@@ -232,13 +246,24 @@ export default function CampusLifePage() {
               </CardHeader>
 
               <CardContent>
-                <p className="text-gray-600 line-clamp-3 text-sm">
+                <p
+                  className={`text-gray-600 text-sm ${expandedId === event._id ? "" : "line-clamp-3"}`}
+                >
                   {event.description}
                 </p>
               </CardContent>
 
               <CardFooter>
-                <Button variant={"outline"} className="w-full">التفاصيل</Button>
+                <Button
+                  variant={"outline"}
+                  className="w-full"
+                  aria-expanded={expandedId === event._id}
+                  onClick={() =>
+                    setExpandedId(expandedId === event._id ? null : event._id)
+                  }
+                >
+                  {expandedId === event._id ? "إخفاء التفاصيل" : "التفاصيل"}
+                </Button>
               </CardFooter>
             </Card>
           ))}
